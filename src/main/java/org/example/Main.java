@@ -1,5 +1,8 @@
 package org.example;
-import java.io.File;
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 import org.alicebot.ab.Bot;
 import org.alicebot.ab.Chat;
 import org.alicebot.ab.History;
@@ -10,17 +13,32 @@ public class Main {
     private static final boolean TRACE_MODE = false;
     static String botName = "super";
     public static void main(String[] args) {
+
         try {
+            ServerSocket server = new ServerSocket(9806);
+            System.out.println("Server started");
+
+            System.out.println("Waiting for a client ...");
+
+            Socket socket = server.accept();
+            System.out.println("Client accepted");
+
+            // takes input from the client socket
+            DataInputStream in = new DataInputStream(
+                    new BufferedInputStream(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
             String resourcesPath = getResourcesPath();
             System.out.println(resourcesPath);
             MagicBooleans.trace_mode = TRACE_MODE;
-            Bot bot = new Bot("super", resourcesPath);
+            Bot bot = new Bot(botName, resourcesPath);
             Chat chatSession = new Chat(bot);
             bot.brain.nodeStats();
             String textLine = "";
             while (true) {
                 System.out.print("Human : ");
-                textLine = IOUtils.readInputTextLine();
+//                textLine = IOUtils.readInputTextLine();
+                textLine = in.readUTF();
                 if ((textLine == null) || (textLine.length() < 1))
                     textLine = MagicStrings.null_input;
                 if (textLine.equals("q")) {
@@ -40,8 +58,10 @@ public class Main {
                     while (response.contains("&gt;"))
                         response = response.replace("&gt;", ">");
                     System.out.println("Robot : " + response);
+                    out.println("Robot: "+response);
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
