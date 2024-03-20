@@ -26,7 +26,10 @@ public class Main {
             // takes input from the client socket
             DataInputStream in = new DataInputStream(
                     new BufferedInputStream(socket.getInputStream()));
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+            // Sends output to client
+            DataOutputStream out = new DataOutputStream(
+                    socket.getOutputStream());
 
             String resourcesPath = getResourcesPath();
             System.out.println(resourcesPath);
@@ -37,8 +40,8 @@ public class Main {
             String textLine = "";
             while (true) {
                 System.out.print("Human : ");
-//                textLine = IOUtils.readInputTextLine();
                 textLine = in.readUTF();
+                System.out.println(textLine);
                 if ((textLine == null) || (textLine.length() < 1))
                     textLine = MagicStrings.null_input;
                 if (textLine.equals("q")) {
@@ -58,7 +61,8 @@ public class Main {
                     while (response.contains("&gt;"))
                         response = response.replace("&gt;", ">");
                     System.out.println("Robot : " + response);
-                    out.println("Robot: "+response);
+
+                    out.writeUTF("Robot: "+response);
                 }
             }
 

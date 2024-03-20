@@ -7,6 +7,7 @@ public class Client {
     private Socket socket = null;
     private DataInputStream input = null;
     private DataOutputStream out = null;
+    private DataInputStream in = null;
 
     // constructor to put ip address and port
     public Client(String address, int port)
@@ -22,6 +23,10 @@ public class Client {
             // sends output to the socket
             out = new DataOutputStream(
                     socket.getOutputStream());
+
+            // takes input from server
+            in = new DataInputStream(
+                    new BufferedInputStream(socket.getInputStream()));
         }
         catch (UnknownHostException u) {
             System.out.println(u);
@@ -37,13 +42,16 @@ public class Client {
 
         // keep reading until "Over" is input
         while (!line.equals("wp")) {
+            System.out.print("Human: ");
             try {
                 line = input.readLine();
                 out.writeUTF(line);
+                System.out.println(in.readUTF());
             }
             catch (IOException i) {
                 System.out.println(i);
             }
+
         }
 
         // close the connection
