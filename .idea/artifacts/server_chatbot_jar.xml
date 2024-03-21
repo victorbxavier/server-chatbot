@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="server-chatbot:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/server_chatbot_jar</output-path>
+    <root id="archive" name="server-chatbot.jar">
+      <element id="module-output" name="server-chatbot" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/Ab.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

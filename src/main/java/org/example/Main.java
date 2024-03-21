@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) {
 
         try {
-            ServerSocket server = new ServerSocket(9806);
+            ServerSocket server = new ServerSocket(8080);
             System.out.println("Server started");
 
             System.out.println("Waiting for a client ...");
